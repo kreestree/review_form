@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+    {% for problem in problems %}
+    <div class="card">
+        <div class="card-header">{{ problem }} <a href="{{ problem.get_absolute_url }}">Открыть полностью</a></div>
+        <div class="card-body">
+            <ul>
+                <li>На оборудовании: <b>"{{ problem.equipment }}"</b></li>
+                <li>Время обнаружения: <b>{{ problem.time_create }}</b></li>
+                <li>Описание проблемы: <b>{{ problem.problem_description }}</b></li>
+            </ul>
+        </div>
+    </div>
+    {% if not forloop.last %}
+    <hr>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}
