@@ -14,10 +14,14 @@ class Equipment(models.Model):
     factory_area = models.ForeignKey('FactoryArea',
                                      on_delete=models.CASCADE,
                                      verbose_name='Участок',
-                                     related_name='equipment')
+                                     related_name='equipment',
+                                     null=True, blank=True)
 
     def __str__(self) -> str:
-        return f'{self.equipment_name}, инв.№: {self.inventory_number}'
+        if self.inventory_number:
+            return f'{self.equipment_name}, инв.№: {self.inventory_number}'
+        else:
+            return f'{self.equipment_name}'
 
     class Meta:
         verbose_name = 'Оборудование'
@@ -85,3 +89,12 @@ class Image(models.Model):
     class Meta:
         verbose_name = 'Фото'
         verbose_name_plural = 'Фото'
+
+
+# class ProblemSolution(models.Model):
+#     problem = models.OneToOneField('Problems',
+#                                    on_delete=models.CASCADE,
+#                                    related_name='solution',
+#                                    verbose_name='Проблема')
+
+
