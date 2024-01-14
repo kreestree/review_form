@@ -47,17 +47,16 @@
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
-                 data-bs-interval="false">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner overflow-hidden">
 
                     {% for image in problem.images.all %}
                     {% if forloop.first %}
-                    <div class="carousel-item active">
+                    <div class="carousel-item active" data-bs-interval="false">
                         <img src="{{ image.image.url }}" alt="Изображение {{ forloop.counter }}">
                     </div>
                     {% else %}
-                    <div class="carousel-item">
+                    <div class="carousel-item" data-bs-interval="false">
                         <img src="{{ image.image.url }}" class="d-block w-100"
                              alt="Изображение {{ forloop.counter }}">
                     </div>
