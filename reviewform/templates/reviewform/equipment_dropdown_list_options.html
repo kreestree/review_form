@@ -1,0 +1,4 @@
+<option value="">Не выбрано</option>
+{% for equipment in equipments %}
+<option value="{{ equipment.pk }}">{{ equipment }}</option>
+{% endfor %}
