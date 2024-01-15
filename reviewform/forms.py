@@ -3,7 +3,7 @@ from io import BytesIO
 from django import forms
 from django.core.exceptions import ValidationError
 import PIL
-from problems.models import Problems
+from problems.models import Problems, Equipment
 from django.core.files import File
 
 
@@ -49,21 +49,32 @@ class MultipleImageField(forms.FileField):
 
 
 class AddProblemForm(forms.ModelForm):
-    image_field = MultipleImageField(required=False, label = 'Прикрепите изображения (не более десяти)')
+    image_field = MultipleImageField(required=False, label='Прикрепите изображения (не более десяти)')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['image_field'].widget.attrs.update({'accept': "image/*", 'class': 'form-control'})
 
         for field in ('factory_area', 'equipment'):
-            self.fields[field].empty_label = 'Не выбран'
             self.fields[field].widget.attrs['class'] = 'form-select'
+        self.fields['factory_area'].empty_label = 'Не выбран'
+        self.fields['equipment'].empty_label = 'Не выбрано'
 
         for field in 'problem_description', 'employee_full_name':
             self.fields[field].widget.attrs.update({'placeholder': self.fields[field].label})
 
         for field in 'problem_description', 'employee_full_name':
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+        self.fields['equipment'].queryset = Equipment.objects.none()
+        if 'factory_area' in self.data:
+            try:
+                factory_area_id = int(self.data.get('factory_area'))
+                self.fields['equipment'].queryset = Equipment.objects.filter(factory_area_id=factory_area_id)
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            self.fields['equipment'].queryset = self.instance.factory_area.equipment_set
 
     class Meta:
         model = Problems

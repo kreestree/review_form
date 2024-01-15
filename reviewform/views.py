@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, FormView
 
 from .forms import AddProblemForm
-from problems.models import Image, Problems
+from problems.models import Image, Problems, Equipment
 
 
 class ReportProblem(FormView):
@@ -29,3 +29,10 @@ def success(request):
     return render(request, 'reviewform/success.html', {'title': 'Успешно'})
 
 
+def load_equipments(request):
+    factory_area_id = request.GET.get('factory_area')
+    if factory_area_id:
+        equipments = Equipment.objects.filter(factory_area_id=factory_area_id)
+    else:
+        equipments = Equipment.objects.none()
+    return render(request, 'reviewform/equipment_dropdown_list_options.html', {'equipments': equipments})

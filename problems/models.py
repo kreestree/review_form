@@ -20,12 +20,13 @@ class Equipment(models.Model):
     def __str__(self) -> str:
         if self.inventory_number:
             return f'{self.equipment_name}, инв.№: {self.inventory_number}'
-        else:
+        elif self.equipment_name:
             return f'{self.equipment_name}'
 
     class Meta:
         verbose_name = 'Оборудование'
         verbose_name_plural = 'Оборудование'
+        ordering = ['equipment_name']
 
 
 class FactoryArea(models.Model):
@@ -34,7 +35,8 @@ class FactoryArea(models.Model):
     area_title = models.CharField(max_length=150, verbose_name='Участок')
 
     def __str__(self) -> str:
-        return str(self.area_title)
+        if self.area_title:
+            return str(self.area_title)
 
     class Meta:
         verbose_name = 'Участок'
@@ -56,7 +58,8 @@ class Problems(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
 
     def __str__(self) -> str:
-        return f'Проблема на участке "{self.factory_area}"'
+        if self.factory_area:
+            return f'Проблема на участке "{self.factory_area}"'
 
     def get_absolute_url(self) -> str:
         return reverse('problem', kwargs={'problem_pk': self.pk})
@@ -84,7 +87,8 @@ class Image(models.Model):
         return ""
 
     def __str__(self) -> str:
-        return self.image.url
+        if self.image:
+            return self.image.url
 
     class Meta:
         verbose_name = 'Фото'

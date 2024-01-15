@@ -1,21 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block main %}
-<div class="container">
-    <h1>{{ title }}:</h1>
+    <div class="container">
+        <h1>{{ title }}:</h1>
 
-    <form action="{% url 'add_problem' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="invalid-feedback">{{ form.non_field_errors }}</div>
+        <form action="{% url 'add_problem' %}" method="post" id="reviewForm" enctype="multipart/form-data"
+              data-equipments-url="{% url 'ajax_load_equipments' %}">
+            {% csrf_token %}
+            <div class="invalid-feedback">{{ form.non_field_errors }}</div>
 
-        {% for f in form %}
-        <div>{{ f.errors }}</div>
-        <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}:</label>{{ f }}</p>
+            {% for f in form %}
+                <div>{{ f.errors }}</div>
+                <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}:</label>{{ f }}</p>
 
-        {% endfor %}
+            {% endfor %}
 
-        <button type="submit" class="btn btn-primary">Отправить</button>
-    </form>
+            <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
 
-</div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="{% static 'reviewform/js/ajax_dropdown_list_options.js' %}"></script>
 {% endblock %}
